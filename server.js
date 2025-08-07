@@ -10,6 +10,23 @@ function hashPassword(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
+function parseCookies(req) {
+  const list = {};
+  const cookieHeader = req.headers?.cookie;
+  if (!cookieHeader) return list;
+
+  cookieHeader.split(';').forEach(cookie => {
+    let [name, ...rest] = cookie.split('=');
+    name = name.trim();
+    const value = rest.join('=').trim();
+    if (name && value) {
+      list[name] = decodeURIComponent(value);
+    }
+  });
+
+  return list;
+}
+
 let myDataBase = {};
 // Load existing mappings from file
 const dataFile = path.join(__dirname, 'urlData.json');
@@ -126,6 +143,23 @@ const server = http.createServer((req, res) => {
         Location: BASE_URL,
       }).end();
     });
+    return;
+  }
+
+  if (req.url === '/logout' && req.method === 'POST') {
+    const cookies = parseCookies(req);
+    const sessionId = cookies.sessionId;
+
+    if (sessionId && mySessions[sessionId]) {
+      delete mySessions[sessionId];
+    }
+
+    // Clear cookie by setting expiry in the past
+    res.writeHead(301, {
+      'Set-Cookie': 'sessionId=; Path=/; Max-Age=0',
+      'Location': BASE_URL
+    });
+    res.end();
     return;
   }
 
