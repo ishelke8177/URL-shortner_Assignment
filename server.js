@@ -51,6 +51,18 @@ const server = http.createServer((req, res) => {
     return renderStaticFile(path.join(__dirname, 'public', 'register.html'), 'text/html', res);
   }
 
+  if (req.url === '/login.css' && req.method === 'GET') {
+    return renderStaticFile(path.join(__dirname, 'public', 'login.css'), 'text/css', res);
+  }
+
+  if (req.url === '/index.css' && req.method === 'GET') {
+    return renderStaticFile(path.join(__dirname, 'public', 'index.css'), 'text/css', res);
+  }
+
+  if (req.url === '/register.css' && req.method === 'GET') {
+    return renderStaticFile(path.join(__dirname, 'public', 'register.css'), 'text/css', res);
+  }
+
   if (req.url === '/login' && req.method === 'GET') {
     return renderStaticFile(path.join(__dirname, 'public', 'login.html'), 'text/html', res);
   }
@@ -136,8 +148,13 @@ const server = http.createServer((req, res) => {
         const alias = params.get('alias'); 
         if(myDataBase[alias]) {
           res.end(`
-            <p>URL alias already exists...</p>
-            <a href="/">Try with another alias</a>
+            <div style="font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right, #4facfe, #00f2fe); color: #fff; padding: 40px; text-align: center; height: 100vh;">
+              <div style="background: #fff; color: #333; display: inline-block; padding: 30px 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+                <h2 style="margin-top: 0; color: #ff4d4f;">Alias Already Exists</h2>
+                <p style="font-size: 18px;">The URL alias you entered is already taken. Please try another one.</p>
+                <a href="/" style="display: inline-block; background-color: #4facfe; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 16px;">Try Another Alias</a>
+              </div>
+            </div>
           `);
           return;
         }
@@ -148,10 +165,17 @@ const server = http.createServer((req, res) => {
 
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end(`
-        <p>Short URL created:</p>
-        <a href="/${shortCode}">${BASE_URL}/${shortCode}</a><br><br>
-        <a href="/">Shorten another</a>
+        <div style="font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right, #4facfe, #00f2fe); color: #fff; padding: 60px; text-align: center; height: 100vh;">
+          <div style="background: #fff; color: #333; display: inline-block; padding: 30px 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+            <h2 style="margin-top: 0;">Short URL Created!</h2>
+            <p style="font-size: 18px;">Your shortened URL:</p>
+            <a href="/${shortCode}" style="color: #4facfe; font-size: 18px; word-break: break-all;">${BASE_URL}/${shortCode}</a>
+            <br><br>
+            <a href="/" style="display: inline-block; background-color: #4facfe; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 16px;">Shorten Another</a>
+          </div>
+        </div>
       `);
+
     });
     return;
   }
