@@ -11,6 +11,13 @@
   <form action="/shorten" id="shortenForm" method="POST">
     <input type="text" name="originalUrl" placeholder="Enter long URL" required>
     <button type="submit">Shorten</button>
+
+    <p id="loginMessage" class="info-text">If you want to generate custom URL then <a href="/login">login</a>.</p>
+  </form>
+
+  <!-- Logout Button Container - initially hidden -->
+  <form id="logoutForm" action="/logout" method="POST" style="display: none;">
+    <button type="submit" class="logout-btn">Logout</button>
   </form>
 
   <script>
@@ -27,9 +34,9 @@
     console.log('Session ID:', sessionId);
 
     if (sessionId) {
-      const form = document.getElementById('shortenForm');
       document.getElementById('title').textContent = 'Custom URL Shortener';
 
+      const form = document.getElementById('shortenForm');
       const aliasInput = document.createElement('input');
       aliasInput.type = 'text';
       aliasInput.name = 'alias';
@@ -38,6 +45,10 @@
 
       const submitButton = form.querySelector('button[type="submit"]');
       form.insertBefore(aliasInput, submitButton);
+
+      // Show logout button
+      document.getElementById('logoutForm').style.display = 'block';
+      document.getElementById('loginMessage').style.display = 'none';
     }
   </script>
 </body>
