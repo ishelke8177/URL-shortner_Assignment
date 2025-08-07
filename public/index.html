@@ -6,10 +6,37 @@
   <link rel="stylesheet" href="">
 </head>
 <body>
-  <h1>Anonymous URL Shortener</h1>
-  <form action="/shorten" method="POST">
+  <h1 id="title">Anonymous URL Shortener</h1>
+  <form action="/shorten" id="shortenForm" method="POST">
     <input type="text" name="originalUrl" placeholder="Enter long URL" required>
     <button type="submit">Shorten</button>
   </form>
+  <script>
+    function getSessionId() {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'sessionId') return value;
+      }
+      return null;
+    }
+
+    const sessionId = getSessionId();
+    console.log('Session ID:', sessionId);
+
+    if (sessionId) {
+      const form = document.getElementById('shortenForm');
+      document.getElementById('title').textContent = 'Custom URL Shortener';
+
+      const aliasInput = document.createElement('input');
+      aliasInput.type = 'text';
+      aliasInput.name = 'alias';
+      aliasInput.placeholder = 'URL Alias';
+      aliasInput.required = true;
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      form.insertBefore(aliasInput, submitButton);
+    }
+  </script>
 </body>
 </html>
