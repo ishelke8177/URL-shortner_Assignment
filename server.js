@@ -1,9 +1,23 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+
+function hashPassword(password) {
+  return crypto.createHash('sha256').update(password).digest('hex');
+}
 
 let myDataBase = {};
+// Load existing mappings from file
 const dataFile = path.join(__dirname, 'urlData.json');
+if (fs.existsSync(dataFile)) {
+  const data = fs.readFileSync(dataFile);
+  try {
+    myDataBase = JSON.parse(data);
+  } catch (err) {
+    console.error("Failed to parse urlData.json:", err);
+  }
+}
 
 function generateRandomCode() {
   return Math.random().toString(36).substring(2, 8);
@@ -28,6 +42,40 @@ function renderStaticFile(filePath, contentType, res) {
 const server = http.createServer((req, res) => {
   if (req.url === '/') {
     return renderStaticFile(path.join(__dirname, 'public', 'index.html'), 'text/html', res);
+  }
+
+  if (req.url === '/register' && req.method === 'GET') {
+    return renderStaticFile(path.join(__dirname, 'public', 'register.html'), 'text/html', res);
+  }
+
+  if (req.url === '/register' && req.method === 'POST') {
+    console.log('Received registration request');
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      const params = new URLSearchParams(body);
+      const username = params.get('username');
+      const password = params.get('password');
+
+      if (!username || !password) {
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        return res.end('Username and password are required');
+      }
+
+      if (myDataBase[username]) {
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        return res.end('Username already exists.');
+      }
+
+      const salt = crypto.randomBytes(16).toString('hex');
+      const hashedPassword = hashPassword(password + salt);
+
+      myDataBase[username] = { hashedPassword, salt };
+      saveToDB();
+
+      res.writeHead(301, { Location: 'http://localhost:3000' }).end();
+    });
+    return;
   }
 
   if (req.method === 'POST' && req.url === '/shorten') {
