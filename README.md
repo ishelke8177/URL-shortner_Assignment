@@ -33,7 +33,7 @@ project/
 │
 ├── urlData.json          # JSON file to persist user and URL data
 ├── server.js             # Main server file
-├── views.js             # Views files
+├── views.js              # Views files
 ├── utils.js              # Utility functions (hashing, cookies, rendering etc.)
 └── test/
     └── testUtils.js      # Unit tests for utility functions
@@ -103,12 +103,26 @@ node test/testUtils.js
 ## 📷 Screenshots
 
 - Custom url shortner
+<img width="1366" height="768" alt="cutrom url short" src="https://github.com/user-attachments/assets/ba6bfa3c-272f-4c42-b969-834838a895d0" />
+
 - Anonymous url shortner
+<img width="1366" height="768" alt="ano url short" src="https://github.com/user-attachments/assets/85f6be49-f8d9-4052-a390-acff277cdace" />
+
 - Login page
+<img width="1366" height="768" alt="login" src="https://github.com/user-attachments/assets/1cb205b9-ecb9-4db4-b556-f2a4d5ff3b47" />
+
 - Register page
+<img width="1366" height="768" alt="register" src="https://github.com/user-attachments/assets/388a746f-fc20-4ba6-adc2-af7c8bc46c17" />
+
 - Short URL result screen
+<img width="1366" height="768" alt="result" src="https://github.com/user-attachments/assets/93c2094b-e3ce-48e0-ab76-5d592b43728b" />
+
 - Invalid URL entered screen
+<img width="1366" height="768" alt="invalidURL" src="https://github.com/user-attachments/assets/f57a8d29-4d49-41e6-8d0b-d2171a5d4250" />
+
 - Alias already exists screen
+<img width="1366" height="768" alt="alias exists" src="https://github.com/user-attachments/assets/36a21458-1caa-4ff5-8738-05c21a2ffe2d" />
+
 
 ---
 
